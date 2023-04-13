@@ -5,13 +5,16 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
 
+    final int REQUEST_INFO = 1;
     TextView tvResult, tvResultLabal;
+    String str;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,12 +24,38 @@ public class MainActivity extends AppCompatActivity {
         Button btnEnd = findViewById(R.id.btnEnd);
         tvResult = findViewById(R.id.tVResvlt);
         tvResultLabal = findViewById(R.id.tVResultLabel);
-        EditText editText= findViewById(R.id.editTextID);
-        ///...
+        EditText editTextID = findViewById(R.id.editTextID);
+
+        btnReq.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent it = new Intent(getApplicationContext(), InformationActivity.class);
+                str = editTextID.getText().toString();
+                it.putExtra("id", str);
+                startActivityForResult(it, REQUEST_INFO);
+            }
+        });
+
+        btnEnd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        if ((requestCode == REQUEST_INFO) && (resultCode == RESULT_OK)) {
+            str ="아이디" + str;
+            str = str + "\n이름: " + data.getStringExtra("name");
+            str = str + "\n나이: " + data.getStringExtra("age");
+            str = str + "\n성별: " + data.getStringExtra("sex");
+            str = str + "\n자격증: " + data.getStringExtra("License");
+
+            tvResultLabal.setText("정보\n전송\n출력");
+            tvResult.setText(str);
+        }
     }
 }
