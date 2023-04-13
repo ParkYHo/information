@@ -24,7 +24,6 @@
         <activity
             android:name=".InformationActivity"
             android:label="가입하기"  />
-
     </application>
 
 </manifest>
